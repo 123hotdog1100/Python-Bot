@@ -15,7 +15,7 @@ async def ping(ctx):
 
 
 @client.command(aliases=['8ball', 'eightball'])
-async def _8ball(ctx,* , question):
+async def _8ball(ctx,* , Question):
     responses =["It is certain.",
                 "It is decidedly so.",
                 "Without a doubt.",
