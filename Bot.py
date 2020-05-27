@@ -41,5 +41,5 @@ async def _8ball(ctx,* , Question):
 @client.command()
 async def join(ctx):
     channel = ctx.author.voice.channel
-    await channel.connect(channel)
+    await channel.connect()
 client.run('NzE0OTU3NDQ4NTUyNjQ0NjE4.Xs7omQ.Gl1S8bo_0rmNjdoY7iWgndwmpS4')
