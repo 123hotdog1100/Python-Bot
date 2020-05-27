@@ -37,7 +37,8 @@ async def _8ball(ctx,* , question):
                 "Outlook not so good.",
                 "Very doubtful."]
     await ctx.send(f'Question: {Question}\nAnswer:{random.choice(responses)}')
-@client.command()
+
+@client.command(pass_context=true)
 async def join(ctx):
     channel = ctx.message.author.voice.channel
     await client.join_voice_channel(channel)
