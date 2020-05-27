@@ -1,5 +1,7 @@
 import discord
 from discord.ext import commands
+from discord.ext import voice
+from discord.voice_client import VoiceClient
 import random
 client = commands.Bot(command_prefix = ".")
 
