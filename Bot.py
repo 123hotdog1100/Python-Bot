@@ -42,4 +42,8 @@ async def _8ball(ctx,* , Question):
 async def join(ctx):
     channel = ctx.author.voice.channel
     await channel.connect()
+
+@client.command()
+async def leave(ctx):
+    await ctx.voice_client.disconnect()
 client.run('NzE0OTU3NDQ4NTUyNjQ0NjE4.Xs7omQ.Gl1S8bo_0rmNjdoY7iWgndwmpS4')
