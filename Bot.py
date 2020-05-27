@@ -6,7 +6,6 @@ client = commands.Bot(command_prefix = ".")
 
 @client.event
 async def on_ready():
-    await client.change_presence(game=discord.Game(name="Being fecking cool"))
     print('bot is Ready.')
 
 @client.command()
@@ -37,4 +36,8 @@ async def _8ball(ctx,* , question):
                 "Outlook not so good.",
                 "Very doubtful."]
     await ctx.send(f'Question: {Question}\nAnswer:{random.choice(responses)}')
+@client.command()
+async def join(ctx):
+    channel = ctx.message.author.voice.voice_channel
+    await client.join_voice_channel(channel)
 client.run('NzE0OTU3NDQ4NTUyNjQ0NjE4.Xs7omQ.Gl1S8bo_0rmNjdoY7iWgndwmpS4')
