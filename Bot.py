@@ -1,14 +1,15 @@
+import random
+
 import discord
 from discord.ext import commands
-from discord.voice_client import VoiceClient
-import random
+import os
 
 client = commands.Bot(command_prefix=".")
 
 
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Game('My prefix is', '.'))
+    await client.change_presence(activity=discord.Game('My prefix is' + '.'))
     print('bot is Ready.')
 
 
@@ -17,7 +18,7 @@ async def ping(ctx):
     await ctx.send(f"pong! {round(client.latency * 1000)} MS")
 
 
-@client.command(aliases=['8ball', 'eightball'])
+@client.command(aliases=['8ball', 'eightball', 'ball'])
 async def _8ball(ctx, *, Question):
     responses = ["It is certain.",
                  "It is decidedly so.",
@@ -43,26 +44,17 @@ async def _8ball(ctx, *, Question):
 
 
 @client.command()
-async def join(ctx):
-    channel = ctx.author.voice.channel
-    await channel.connect()
+async def load(ctx, extension):
+    client.load_extension(f'cogs.{extension}')
 
 
 @client.command()
-async def leave(ctx):
-    await ctx.voice_client.disconnect()
+async def unload(ctx, extension):
+    client.unload_extension(f'cogs.{extension}')
 
 
-@join.error
-async def join_error(ctx, error):
-    if isinstance(error, commands.CommandInvokeError):
-        await ctx.send('You need to be in a voice chat for this')
-
-
-@leave.error
-async def leave_error(ctx, error):
-    if isinstance(error, commands.CommandInvokeError):
-        await ctx.send('I\'m not currently in a voice chat')
-
+for filename in os.listdir('./cogs'):
+    if filename.endswith(".py"):
+        client.load_extension(f'cogs.{filename[:-3]}')
 
 client.run('NzE0OTU3NDQ4NTUyNjQ0NjE4.Xs7omQ.Gl1S8bo_0rmNjdoY7iWgndwmpS4')
