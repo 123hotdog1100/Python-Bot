@@ -1,11 +1,13 @@
 import random
 import requests
 import discord
+import youtube_dl
 from discord.ext import commands
 import os
 
 client = commands.Bot(command_prefix=".")
 
+players ={}
 
 @client.event
 async def on_ready():
@@ -57,7 +59,6 @@ async def unload(ctx, extension):
 async def test(ctx):
     r = requests.get('https://google.com')
     await ctx.send(f'this is the response from google {r}')
-
 
 for filename in os.listdir('./cogs'):
     if filename.endswith(".py"):
