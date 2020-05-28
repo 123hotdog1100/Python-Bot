@@ -1,13 +1,28 @@
 import random
 import requests
 import discord
-import youtube_dl
+import yaml
 from discord.ext import commands
 import os
 
 client = commands.Bot(command_prefix=".")
-
+voice = False
+fun = False
 players = {}
+config = [{"modules": ["voice", "fun"]}]
+
+
+##checks for the file
+def startup():
+    config_check()
+
+
+def config_check():
+    for filename in os.listdir('./'):
+        if filename == "config.yaml":
+            return True
+    else:
+        return False
 
 
 @client.event
@@ -58,12 +73,13 @@ async def unload(ctx, extension):
 
 @client.command()
 async def shutdown(ctx):
+    await ctx.send("Shutting the bot down ")
     await client.close()
 
 
 @client.command()
 async def test(ctx):
-    r = requests.get('https://google.com')
+    r = requests.head('https://httpbin.org/get')
     await ctx.send(f'this is the response from google {r}')
 
 
@@ -71,4 +87,24 @@ for filename in os.listdir('./cogs'):
     if filename.endswith(".py"):
         client.load_extension(f'cogs.{filename[:-3]}')
 
-client.run('NzE0OTU3NDQ4NTUyNjQ0NjE4.Xs7omQ.Gl1S8bo_0rmNjdoY7iWgndwmpS4')
+
+def get_config():
+    global fun, voice
+    with open('config.yaml') as f:
+        conf = yaml.full_load(f)
+        print(conf)
+        if "Voice" in conf:
+            voice = True
+        if "fun" in conf:
+            fun = True
+        print(voice, fun)
+    f.close()
+get_config()
+if config_check():
+    client.run('NzE0OTU3NDQ4NTUyNjQ0NjE4.Xs7omQ.Gl1S8bo_0rmNjdoY7iWgndwmpS4')
+else:
+    c = open("config.yaml", "w")
+    f = yaml.dump(config, c)
+
+startup()
+
