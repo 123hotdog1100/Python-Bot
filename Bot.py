@@ -7,7 +7,8 @@ import os
 
 client = commands.Bot(command_prefix=".")
 
-players ={}
+players = {}
+
 
 @client.event
 async def on_ready():
@@ -56,9 +57,15 @@ async def unload(ctx, extension):
 
 
 @client.command()
+async def shutdown(ctx):
+    await client.close()
+
+
+@client.command()
 async def test(ctx):
     r = requests.get('https://google.com')
     await ctx.send(f'this is the response from google {r}')
+
 
 for filename in os.listdir('./cogs'):
     if filename.endswith(".py"):
