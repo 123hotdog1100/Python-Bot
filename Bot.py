@@ -1,5 +1,5 @@
 import random
-
+import requests
 import discord
 from discord.ext import commands
 import os
@@ -51,6 +51,12 @@ async def load(ctx, extension):
 @client.command()
 async def unload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
+
+
+@client.command()
+async def test(ctx):
+    r = requests.get('https://google.com')
+    await ctx.send(f'this is the response from google {r}')
 
 
 for filename in os.listdir('./cogs'):
