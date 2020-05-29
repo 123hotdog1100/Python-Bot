@@ -4,25 +4,30 @@ import discord
 import yaml
 from discord.ext import commands
 import os
+from configparser import ConfigParser
 
 client = commands.Bot(command_prefix=".")
-voice = False
-fun = False
+Voice = False
+Fun = False
 players = {}
-config = [{"modules": ["voice", "fun"]}]
+config = ConfigParser()
+config["Modules"] = {
+    'Voice': 'True',
+    'Fun': 'True'
+}
 
 
-##checks for the file
-def startup():
-    config_check()
-
-
+##config startup check
 def config_check():
     for filename in os.listdir('./'):
-        if filename == "config.yaml":
+        if filename == "config.ini":
             return True
     else:
         return False
+
+
+def startup():
+    config_check()
 
 
 @client.event
@@ -87,24 +92,22 @@ for filename in os.listdir('./cogs'):
     if filename.endswith(".py"):
         client.load_extension(f'cogs.{filename[:-3]}')
 
+parser = ConfigParser()
+
 
 def get_config():
-    global fun, voice
-    with open('config.yaml') as f:
-        conf = yaml.full_load(f)
-        print(conf)
-        if "Voice" in conf:
-            voice = True
-        if "fun" in conf:
-            fun = True
-        print(voice, fun)
-    f.close()
+    global Fun, Voice, parser
+    parser.read('config.ini')
+    Voice = parser.get('Modules', 'Voice')
+    Fun = parser.get('Modules', 'Fun')
+    print(Voice, Fun)
+
+
 get_config()
 if config_check():
     client.run('NzE0OTU3NDQ4NTUyNjQ0NjE4.Xs7omQ.Gl1S8bo_0rmNjdoY7iWgndwmpS4')
 else:
-    c = open("config.yaml", "w")
-    f = yaml.dump(config, c)
+    with open('config.ini', "w") as c:
+        config.write(c)
 
 startup()
-
