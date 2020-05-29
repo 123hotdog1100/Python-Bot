@@ -9,11 +9,15 @@ from configparser import ConfigParser
 client = commands.Bot(command_prefix=".")
 Voice = False
 Fun = False
+Key = ''
 players = {}
 config = ConfigParser()
 config["Modules"] = {
     'Voice': 'True',
     'Fun': 'True'
+}
+config["Bot"] = {
+    'Key': 'NzE0OTU3NDQ4NTUyNjQ0NjE4.Xs7omQ.Gl1S8bo_0rmNjdoY7iWgndwmpS4'
 }
 
 
@@ -96,16 +100,17 @@ parser = ConfigParser()
 
 
 def get_config():
-    global Fun, Voice, parser
+    global Fun, Voice, parser, Key
     parser.read('config.ini')
     Voice = parser.get('Modules', 'Voice')
     Fun = parser.get('Modules', 'Fun')
-    print(Voice, Fun)
+    Key = parser.get('Bot', 'Key')
 
 
-get_config()
+
 if config_check():
-    client.run('NzE0OTU3NDQ4NTUyNjQ0NjE4.Xs7omQ.Gl1S8bo_0rmNjdoY7iWgndwmpS4')
+    get_config()
+    client.run(Key)
 else:
     with open('config.ini', "w") as c:
         config.write(c)
