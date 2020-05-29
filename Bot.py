@@ -22,7 +22,7 @@ config["Bot"] = {
     'Prefix': '.'
 }
 
-
+client = null
 ##Reads the config.ini file for parameters
 def get_config():
     global Fun, Voice, parser, Key, client, Prefix
