@@ -37,6 +37,10 @@ def get_config():
         if Voice == 'True':
             print("Loading Voice")
             client.load_extension("cogs.Voice")
+        if Voice == 'False':
+            print("Not loading Voice")
+        if Fun == 'False':
+            print("Not loading Fun")
         if Fun == 'True':
             print("Loading Fun")
             client.load_extension("cogs.Fun")
