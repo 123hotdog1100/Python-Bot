@@ -101,10 +101,13 @@ parser = ConfigParser()
 
 def get_config():
     global Fun, Voice, parser, Key
-    parser.read('config.ini')
-    Voice = parser.get('Modules', 'Voice')
-    Fun = parser.get('Modules', 'Fun')
-    Key = parser.get('Bot', 'Key')
+    try:
+        parser.read('config.ini')
+        Voice = parser.get('Modules', 'Voice')
+        Fun = parser.get('Modules', 'Fun')
+        Key = parser.get('Bot', 'Key')
+    except():
+        print("sorry i have encounted an error laoding the config")
 
 
 
