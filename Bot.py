@@ -1,4 +1,3 @@
-import requests
 import discord
 from discord.ext import commands
 import os
@@ -8,6 +7,7 @@ client = commands.Bot(command_prefix=".")
 Voice = False
 Fun = False
 Key = ''
+Prefix = '.'
 players = {}
 config = ConfigParser()
 config["Modules"] = {
@@ -17,17 +17,19 @@ config["Modules"] = {
 parser = ConfigParser()
 
 config["Bot"] = {
-    'Key': 'NzE0OTU3NDQ4NTUyNjQ0NjE4.Xs7omQ.Gl1S8bo_0rmNjdoY7iWgndwmpS4'
+    'Key': 'NzE0OTU3NDQ4NTUyNjQ0NjE4.XtE6HA.t8VWH90P4KeENGXI_cCgappB5BY',
+    'Prefix': '.'
 }
 
-
 def get_config():
-    global Fun, Voice, parser, Key
+    global Fun, Voice, parser, Key, client, Prefix
     try:
         parser.read('config.ini')
         Voice = parser.get('Modules', 'Voice')
         Fun = parser.get('Modules', 'Fun')
         Key = parser.get('Bot', 'Key')
+        print(Key)
+        Prefix = parser.get('Bot', 'Prefix')
     except():
         print("sorry i have encounted an error laoding the config")
     for filename in os.listdir('./cogs'):
@@ -37,6 +39,7 @@ def get_config():
         if Fun == 'True':
             print("Loading Fun")
             client.load_extension("cogs.Fun")
+        client = commands.Bot(command_prefix= Prefix)
         break
 
 
@@ -86,14 +89,8 @@ async def shutdown(ctx):
     await ctx.send("Shutting the bot down ")
     await client.close()
 
-
-@client.command()
-async def test(ctx):
-    r = requests.head('https://httpbin.org/get')
-    await ctx.send(f'this is the response from google {r}')
-
-
 startup()
-
-
-client.run(Key)
+try:
+    client.run(Key)
+except RuntimeError:
+    print("Please enter a valid Key in the config.ini")
