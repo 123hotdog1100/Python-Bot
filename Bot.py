@@ -20,6 +20,7 @@ config["Bot"] = {
     'Prefix': '.'
 }
 
+
 ##Reads the config.ini file for parameters
 def get_config():
     global Fun, Voice, parser, Key, client, Prefix
@@ -55,11 +56,6 @@ def config_check():
     else:
         return False
 
-
-def startup():
-    config_check()
-
-
 if config_check():
     get_config()
 else:
@@ -94,7 +90,7 @@ async def shutdown(ctx):
     await client.close()
 
 
-startup()
+config_check()
 try:
     client.run(Key)
 except RuntimeError:
