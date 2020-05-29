@@ -3,7 +3,6 @@ from discord.ext import commands
 import os
 from configparser import ConfigParser
 
-client = commands.Bot(command_prefix=".")
 Voice = False
 Fun = False
 Key = ''
@@ -17,10 +16,11 @@ config["Modules"] = {
 parser = ConfigParser()
 
 config["Bot"] = {
-    'Key': 'NzE0OTU3NDQ4NTUyNjQ0NjE4.XtE6HA.t8VWH90P4KeENGXI_cCgappB5BY',
+    'Key': '',
     'Prefix': '.'
 }
 
+##Reads the config.ini file for parameters
 def get_config():
     global Fun, Voice, parser, Key, client, Prefix
     try:
@@ -28,10 +28,11 @@ def get_config():
         Voice = parser.get('Modules', 'Voice')
         Fun = parser.get('Modules', 'Fun')
         Key = parser.get('Bot', 'Key')
-        print(Key)
+        print("Using Key from Config.ini", Key)
         Prefix = parser.get('Bot', 'Prefix')
     except():
         print("sorry i have encounted an error laoding the config")
+    client = commands.Bot(command_prefix=Prefix)
     for filename in os.listdir('./cogs'):
         if Voice == 'True':
             print("Loading Voice")
@@ -39,11 +40,10 @@ def get_config():
         if Fun == 'True':
             print("Loading Fun")
             client.load_extension("cogs.Fun")
-        client = commands.Bot(command_prefix= Prefix)
         break
 
 
-##config startup check
+##Checks to see if the config file exists
 def config_check():
     for filename in os.listdir('./'):
         if filename == "config.ini":
@@ -89,8 +89,9 @@ async def shutdown(ctx):
     await ctx.send("Shutting the bot down ")
     await client.close()
 
+
 startup()
 try:
     client.run(Key)
 except RuntimeError:
-    print("Please enter a valid Key in the config.ini")
+    print("Runtime error please try again")
