@@ -22,10 +22,10 @@ config["Bot"] = {
     'Prefix': '.'
 }
 
-client = ''
+client = commands.Bot(command_prefix=Prefix)
 ##Reads the config.ini file for parameters
 def get_config():
-    global Fun, Voice, parser, Key, client, Prefix
+    global Fun, Voice, parser, Key, Prefix, client
     try:
         parser.read('config.ini')
         Voice = parser.get('Modules', 'Voice')
