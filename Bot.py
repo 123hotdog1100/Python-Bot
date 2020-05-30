@@ -23,6 +23,8 @@ config["Bot"] = {
 }
 
 client = commands.Bot(command_prefix=Prefix)
+
+
 ##Reads the config.ini file for parameters
 def get_config():
     global Fun, Voice, parser, Key, Prefix, client
@@ -61,7 +63,7 @@ def config_check():
 
 if config_check():
     get_config()
-else:
+if not config_check():
     with open('config.ini', "w") as c:
         config.write(c)
 
@@ -94,47 +96,47 @@ async def shutdown(ctx):
 
 
 @client.command(pass_context=True, aliases=['p', 'pla'])
-async def play(ctx, url: str,):
-        song_there = os.path.isfile("song.mp3")
-        try:
-            if song_there:
-                os.remove("song.mp3")
-                print("Removed old song file")
-        except PermissionError:
-            print("Trying to delete song file, but it's being played")
-            await ctx.send("ERROR: Music playing")
-            return
+async def play(ctx, url: str, ):
+    song_there = os.path.isfile("song.mp3")
+    try:
+        if song_there:
+            os.remove("song.mp3")
+            print("Removed old song file")
+    except PermissionError:
+        print("Trying to delete song file, but it's being played")
+        await ctx.send("ERROR: Music playing")
+        return
 
-        await ctx.send("Getting everything ready now")
+    await ctx.send("Getting everything ready now")
 
-        ydl_opts = {
-            'format': 'bestaudio/best',
-            'postprocessors': [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '192'
-            }]
-        }
-        voice = get(client.voice_clients, guild=ctx.guild)
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            print("Downloading audio now\n")
-            ydl.download([url])
-        for file in os.listdir("./"):
-            if file.endswith(".mp3"):
-                name = file
-                print(f"Rename file: {file}\n")
-                os.rename(file, "song.mp3")
-        voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: print(f"{name} has finished playing"))
-        voice.source = discord.PCMVolumeTransformer(voice.source)
-        voice.source.volume = 0.07
-        nname = name.rsplit("-", 2)
-        await ctx.send(f"PlayingL {nname}")
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192'
+        }]
+    }
+    voice = get(client.voice_clients, guild=ctx.guild)
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        print("Downloading audio now\n")
+        ydl.download([url])
+    for file in os.listdir("./"):
+        if file.endswith(".mp3"):
+            name = file
+            print(f"Rename file: {file}\n")
+            os.rename(file, "song.mp3")
+    voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: print(f"{name} has finished playing"))
+    voice.source = discord.PCMVolumeTransformer(voice.source)
+    voice.source.volume = 0.07
+    nname = name.rsplit("-", 2)
+    await ctx.send(f"PlayingL {nname}")
+
 
 @play.error
 async def play_error(ctx, error):
     if isinstance(error, commands.CommandInvokeError):
-     await ctx.send('Please let me join a Voice channel to play audio ')
-
+        await ctx.send('Please let me join a Voice channel to play audio ')
 
 
 config_check()
