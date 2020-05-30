@@ -142,5 +142,5 @@ async def play_error(ctx, error):
 config_check()
 try:
     client.run(Key)
-except RuntimeError:
-    print("Runtime error please try again")
+except discord.errors.LoginFailure:
+    print("Please enter a key")
